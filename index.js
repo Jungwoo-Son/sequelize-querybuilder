@@ -1,68 +1,4 @@
-const { Sequelize, Model, DataTypes  } = require('sequelize');
-
-
-
-
-async function loadDatabase() {
-    try {
-        await sequelize.authenticate();    
-    } catch (error) {
-        throw error;
-    }
-}
-
-
-class UserRepo extends Model { }
-UserRepo.init({
-    id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true
-    }
-}, {
-    sequelize,
-    tableName: 'user'
-});
-
-class CodeSequelizeRepo extends Model { }
-CodeSequelizeRepo.init({
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    title: {
-        type: DataTypes.STRING(256),
-        allowNull: false
-    },
-    content: {
-        type: DataTypes.TEXT(65535),
-        allowNull: false
-    },
-    language: {
-        type: DataTypes.STRING(10),
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.TEXT(65535),
-        allowNull:true
-    },
-    author_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    created_datetime: {
-        type: DataTypes.DATE,
-    }
-    }, 
-    {
-    sequelize,
-    tableName: 'code'
-});
-
-
-class QueryModel {
+class QueryBuilder {
     constructor(Repo) {
         this.repo = Repo;
         this.base_function = undefined;
@@ -72,6 +8,9 @@ class QueryModel {
     findAll() {
         this.base_function = 'findAll';
         return this;
+    }
+    findOne() {
+        this.base_function = 'findOne';
     }
     findPk() {
         this.base_function = 'findPk';
@@ -91,49 +30,27 @@ class QueryModel {
     }
 }
 
-class QueryModelDecorator {
-    static makeQueryModelObject(CustomQueryModel) {
-        const scope_names = Reflect.ownKeys(CustomQueryModel.prototype)
-            .filter(key => typeof CustomQueryModel.prototype[key] === 'function' && key !== 'constructor');
+class QueryBuilderMaker {
+    static make(Scopes) {
+        const scope_names = Reflect.ownKeys(Scopes.prototype)
+            .filter(key => typeof Scopes.prototype[key] === 'function' && key !== 'constructor');
 
-        class NewQueryModel extends QueryModel{
+        class NewQueryBuilder extends QueryBuilder{
             constructor() {
-                super(CustomQueryModel.repo);
+                super(Scopes.repo);
             }
         }
         scope_names.forEach(name => {
-            CustomQueryModel.repo.addScope(name, CustomQueryModel.prototype[name]);
+            Scopes.repo.addScope(name, Scopes.prototype[name]);
 
-            NewQueryModel.prototype[name] = function() {
+            NewQueryBuilder.prototype[name] = function() {
                 this.scopes.push([name, ...arguments]);
                 return this;
             }
         });
-        return NewQueryModel;
+        return NewQueryBuilder;
     }
 }
 
-class CodeQueryModel {
-    static repo = CodeSequelizeRepo;
-    filterId(id) {
-        return {
-            where: {
-                id
-            }
-        };
-    }
 
-
-}
-
-CodeQueryModel = QueryModelDecorator.makeQueryModelObject(CodeQueryModel);
-
-(async () => {
-    const query = new CodeQueryModel();
-                        new UserQueryModel();
-    const codes = await query.findAll().selectName().filterId(2).excute();
-    console.log(codes);
-    await sequelize.close();
-    
-})();
-
+module.exports = QueryBuilderMaker;
