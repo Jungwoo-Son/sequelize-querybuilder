@@ -1,15 +1,6 @@
 const { Sequelize, Model, DataTypes  } = require('sequelize');
 
-const sequelize = new Sequelize('snippet_test', 'root', 'EKA5LjsulQIXGhCEV2Hi', {
-    define: {
-        freezeTableName: true,
-        timestamps: false,
 
-    },
-    host: 'snippet.ctacnk0lszte.ap-northeast-2.rds.amazonaws.com',
-    dialect: 'mysql',
-    logging: false,
-});
 
 
 async function loadDatabase() {
