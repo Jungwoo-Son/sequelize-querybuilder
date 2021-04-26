@@ -14,7 +14,7 @@ class QueryBuilder {
         return this;
     }
     findByPk() {
-        this.base_function = 'findPk';
+        this.base_function = 'findByPk';
         return this;
     }
     create() {
