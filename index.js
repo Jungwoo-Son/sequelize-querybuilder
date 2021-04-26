@@ -13,7 +13,7 @@ class QueryBuilder {
         this.base_function = 'findOne';
         return this;
     }
-    findPk() {
+    findByPk() {
         this.base_function = 'findPk';
         return this;
     }
@@ -26,7 +26,7 @@ class QueryBuilder {
         return this;
     }
     delete() {
-        this.base_function = 'destory';
+        this.base_function = 'destroy';
         return this;
     }
 
