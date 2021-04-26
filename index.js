@@ -3,35 +3,59 @@ class QueryBuilder {
         this.repo = Repo;
         this.base_function = undefined;
         this.scopes = [];
+        this.args = undefined;
     }
 
     findAll() {
+        this.scopes = [];
+        this.args = arguments;
         this.base_function = 'findAll';
         return this;
     }
     findOne() {
+        this.scopes = [];
+        this.args = arguments;
         this.base_function = 'findOne';
         return this;
     }
     findByPk() {
+        this.scopes = [];
+        this.args = arguments;
         this.base_function = 'findByPk';
         return this;
     }
     create() {
+        this.scopes = [];
+        this.args = arguments;
         this.base_function = 'create';
         return this;
     }
     update() {
+        this.scopes = [];
+        this.args = arguments;
         this.base_function = 'update';
         return this;
     }
     delete() {
+        this.scopes = [];
+        this.args = arguments;
         this.base_function = 'destroy';
         return this;
     }
 
-    async excute() {
-        return await this.repo.scope(this.scopes.map(scope => {return {method: scope}}))[this.base_function](...arguments);
+    async excute(transaction) {
+        const args = Array.from(this.args);
+        let flag = false;
+        for(const arg of args) {
+            if(arg.where) {
+                arg.transaction = transaction;
+                flag = true;
+            }
+        }
+        if(flag == false) {
+            args.push({ transaction });
+        }
+        return await this.repo.scope(this.scopes.map(scope => {return {method: scope}}))[this.base_function](...args);
     }
 }
 
