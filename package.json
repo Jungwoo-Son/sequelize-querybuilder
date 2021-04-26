@@ -1,16 +1,9 @@
 {
-  "name": "js-querymodel",
+  "name": "@yeoul/sequelize-querybuilder",
   "version": "1.0.0",
-  "description": "",
+  "description": "querybuilder for sequelize",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "mysql2": "^2.2.5",
-    "sequelize": "^6.6.2"
-  }
+  "author": "yeoul",
+  "license": "MIT",
+  "homepage": "https://github.com/Jungwoo-Son/sequelize-querybuilder"
 }
