@@ -11,18 +11,23 @@ class QueryBuilder {
     }
     findOne() {
         this.base_function = 'findOne';
+        return this;
     }
     findPk() {
         this.base_function = 'findPk';
+        return this;
     }
     create() {
         this.base_function = 'create';
+        return this;
     }
     update() {
         this.base_function = 'update';
+        return this;
     }
     delete() {
         this.base_function = 'delete';
+        return this;
     }
 
     async excute() {
