@@ -1,6 +1,6 @@
 {
   "name": "@yeoul/sequelize-querybuilder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "querybuilder for sequelize",
   "main": "index.js",
   "author": "yeoul",

@@ -26,7 +26,7 @@ class QueryBuilder {
         return this;
     }
     delete() {
-        this.base_function = 'delete';
+        this.base_function = 'destory';
         return this;
     }
 
