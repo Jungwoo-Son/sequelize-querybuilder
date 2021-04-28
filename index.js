@@ -30,6 +30,12 @@ class QueryBuilder {
         this.base_function = 'create';
         return this;
     }
+    upsert() {
+        this.scopes = [];
+        this.args = arguments;
+        this.base_function = 'upsert';
+        return this;
+    }
     update() {
         this.scopes = [];
         this.args = arguments;
