@@ -48,6 +48,12 @@ class QueryBuilder {
         this.base_function = 'destroy';
         return this;
     }
+    count() {
+        this.scopes = [];
+        this.args = arguments;
+        this.base_function = 'count';
+        return this;
+    }
 
     async excute(transaction) {
         const args = Array.from(this.args);
